@@ -2,44 +2,44 @@
 @echo off
 chcp 65001 >nul
 setlocal EnableDelayedExpansion
-title Tamagochi CMD
-mode con: cols=70 lines=35
-color 0B
 
-:: ==========================================================
-:: TAMAGOCHI CMD
-:: Multilingua + ASCII Art animata
-:: ==========================================================
+title Tamagochi
+mode con: cols=72 lines=38
+color 0B
 
 set "SAVE=tamagochi_save.dat"
 
-:: ==========================================================
-:: AVVIO
-:: ==========================================================
 
+:: ============================================================
+:: AVVIO
+:: ============================================================
+
+call :LANGUAGE
+call :TEXT
+
+:: Controlla se esiste una partita
 if exist "%SAVE%" (
     call :LOAD
     goto MAIN
 )
 
-call :LANGUAGE
-
+:: Nuova partita
 cls
+
 echo.
-echo ============================================================
+echo ================================================================
 echo.
-echo                    ^>^> TAMAGOCHI ^<^<
+echo                         !T_TITLE!
 echo.
-echo ============================================================
+echo ================================================================
 echo.
-echo.
-echo                 /\_/\
-echo                ( o.o )
-echo                 ^> ^<
+
+call :ART_HAPPY
+
 echo.
 echo.
 
-set /p "NAME= Nome del tuo Tamagochi: "
+set /p "NAME=!T_ASKNAME!: "
 
 if "!NAME!"=="" set "NAME=Tammy"
 
@@ -52,51 +52,95 @@ set /a COINS=20
 
 call :SAVE
 
+cls
+echo.
+echo ================================================================
+echo.
+echo                 !T_WELCOME!
+echo.
+echo ================================================================
+echo.
+
+timeout /t 2 /nobreak >nul
+
 goto MAIN
 
 
-:: ==========================================================
+:: ============================================================
 :: SCELTA LINGUA
-:: ==========================================================
+:: ============================================================
 
 :LANGUAGE
 
 cls
+
 echo.
-echo ============================================================
+echo ================================================================
 echo.
-echo                    TAMAGOCHI
+echo                         TAMAGOCHI
 echo.
-echo ============================================================
+echo ================================================================
 echo.
-echo              1 - Italiano
-echo              2 - English
-echo              3 - Espanol
-echo              4 - Francais
-echo              5 - 中文
+echo                       SELECT LANGUAGE
 echo.
-echo ============================================================
+echo.
+echo                  1 - Italiano
+echo                  2 - English
+echo                  3 - Espanol
+echo                  4 - Francais
+echo                  5 - 中文
+echo.
+echo ================================================================
 echo.
 
-choice /c 12345 /n /m "              > "
+choice /c 12345 /n /m "                         > "
 
-if errorlevel 5 set "LANG=ZH"
-if errorlevel 4 set "LANG=FR"
-if errorlevel 3 set "LANG=ES"
-if errorlevel 2 set "LANG=EN"
-if errorlevel 1 set "LANG=IT"
+if errorlevel 5 goto LANG_ZH
+if errorlevel 4 goto LANG_FR
+if errorlevel 3 goto LANG_ES
+if errorlevel 2 goto LANG_EN
+if errorlevel 1 goto LANG_IT
 
+goto LANGUAGE
+
+
+:LANG_IT
+set "LANG=IT"
+exit /b
+
+:LANG_EN
+set "LANG=EN"
+exit /b
+
+:LANG_ES
+set "LANG=ES"
+exit /b
+
+:LANG_FR
+set "LANG=FR"
+exit /b
+
+:LANG_ZH
+set "LANG=ZH"
 exit /b
 
 
-:: ==========================================================
+:: ============================================================
 :: TESTI
-:: ==========================================================
+:: ============================================================
 
 :TEXT
 
+:: ------------------------------------------------------------
+:: ITALIANO
+:: ------------------------------------------------------------
+
 if "%LANG%"=="IT" (
+
     set "T_TITLE=TAMAGOCHI"
+    set "T_ASKNAME=Come vuoi chiamare il tuo Tamagochi"
+    set "T_WELCOME=Benvenuto nel mondo di Tamagochi!"
+
     set "T_NAME=Nome"
     set "T_HEALTH=Salute"
     set "T_HUNGER=Fame"
@@ -122,13 +166,41 @@ if "%LANG%"=="IT" (
     set "T_BYE=A presto!"
     set "T_TIRED=e troppo stanco!"
     set "T_DEAD=e morto!"
+    set "T_NOTENOUGH=Non hai abbastanza monete!"
+    set "T_HEALTHLOW=La salute e troppo bassa!"
+
     set "T_WIN=HAI VINTO!"
     set "T_LOSE=HAI PERSO!"
     set "T_DRAW=PAREGGIO!"
+
+    set "T_GAMES=GIOCHI"
+    set "T_GUESS=1 - Indovina il numero"
+    set "T_RPS=2 - Sasso Carta Forbici"
+    set "T_BACK=3 - Torna indietro"
+
+    set "T_GUESS_TITLE=INDOVINA IL NUMERO"
+    set "T_GUESS_TEXT=Indovina un numero da 1 a 10"
+    set "T_NUMBER=Numero"
+
+    set "T_RPS_TITLE=SASSO CARTA FORBICI"
+    set "T_ROCK=1 - Sasso"
+    set "T_PAPER=2 - Carta"
+    set "T_SCISSORS=3 - Forbici"
+
+    set "T_DAY=giorni"
 )
 
+
+:: ------------------------------------------------------------
+:: ENGLISH
+:: ------------------------------------------------------------
+
 if "%LANG%"=="EN" (
+
     set "T_TITLE=TAMAGOCHI"
+    set "T_ASKNAME=What do you want to name your Tamagochi"
+    set "T_WELCOME=Welcome to the world of Tamagochi!"
+
     set "T_NAME=Name"
     set "T_HEALTH=Health"
     set "T_HUNGER=Hunger"
@@ -154,13 +226,41 @@ if "%LANG%"=="EN" (
     set "T_BYE=See you!"
     set "T_TIRED=is too tired!"
     set "T_DEAD=has died!"
+    set "T_NOTENOUGH=You don't have enough coins!"
+    set "T_HEALTHLOW=Health is too low!"
+
     set "T_WIN=YOU WIN!"
     set "T_LOSE=YOU LOSE!"
     set "T_DRAW=DRAW!"
+
+    set "T_GAMES=GAMES"
+    set "T_GUESS=1 - Guess the number"
+    set "T_RPS=2 - Rock Paper Scissors"
+    set "T_BACK=3 - Back"
+
+    set "T_GUESS_TITLE=GUESS THE NUMBER"
+    set "T_GUESS_TEXT=Guess a number from 1 to 10"
+    set "T_NUMBER=Number"
+
+    set "T_RPS_TITLE=ROCK PAPER SCISSORS"
+    set "T_ROCK=1 - Rock"
+    set "T_PAPER=2 - Paper"
+    set "T_SCISSORS=3 - Scissors"
+
+    set "T_DAY=days"
 )
 
+
+:: ------------------------------------------------------------
+:: SPANISH
+:: ------------------------------------------------------------
+
 if "%LANG%"=="ES" (
+
     set "T_TITLE=TAMAGOCHI"
+    set "T_ASKNAME=Como quieres llamar a tu Tamagochi"
+    set "T_WELCOME=Bienvenido al mundo de Tamagochi!"
+
     set "T_NAME=Nombre"
     set "T_HEALTH=Salud"
     set "T_HUNGER=Hambre"
@@ -180,19 +280,47 @@ if "%LANG%"=="ES" (
     set "T_EATING=esta comiendo..."
     set "T_PLAYING=esta jugando..."
     set "T_SLEEPING=esta durmiendo..."
-    set "T_PETTING=Has acariciado"
+    set "T_PETTING=Has acariciado a"
     set "T_HEALED=ha sido curado!"
     set "T_SAVED=Partida guardada!"
     set "T_BYE=Hasta pronto!"
     set "T_TIRED=esta demasiado cansado!"
     set "T_DEAD=ha muerto!"
+    set "T_NOTENOUGH=No tienes suficientes monedas!"
+    set "T_HEALTHLOW=La salud es demasiado baja!"
+
     set "T_WIN=HAS GANADO!"
     set "T_LOSE=HAS PERDIDO!"
     set "T_DRAW=EMPATE!"
+
+    set "T_GAMES=JUEGOS"
+    set "T_GUESS=1 - Adivina el numero"
+    set "T_RPS=2 - Piedra Papel Tijeras"
+    set "T_BACK=3 - Volver"
+
+    set "T_GUESS_TITLE=ADIVINA EL NUMERO"
+    set "T_GUESS_TEXT=Adivina un numero del 1 al 10"
+    set "T_NUMBER=Numero"
+
+    set "T_RPS_TITLE=PIEDRA PAPEL TIJERAS"
+    set "T_ROCK=1 - Piedra"
+    set "T_PAPER=2 - Papel"
+    set "T_SCISSORS=3 - Tijeras"
+
+    set "T_DAY=dias"
 )
 
+
+:: ------------------------------------------------------------
+:: FRANCAIS
+:: ------------------------------------------------------------
+
 if "%LANG%"=="FR" (
+
     set "T_TITLE=TAMAGOCHI"
+    set "T_ASKNAME=Comment veux-tu appeler ton Tamagochi"
+    set "T_WELCOME=Bienvenue dans le monde de Tamagochi!"
+
     set "T_NAME=Nom"
     set "T_HEALTH=Sante"
     set "T_HUNGER=Faim"
@@ -218,13 +346,41 @@ if "%LANG%"=="FR" (
     set "T_BYE=A bientot!"
     set "T_TIRED=est trop fatigue!"
     set "T_DEAD=est mort!"
+    set "T_NOTENOUGH=Tu n'as pas assez de pieces!"
+    set "T_HEALTHLOW=La sante est trop basse!"
+
     set "T_WIN=GAGNE!"
     set "T_LOSE=PERDU!"
     set "T_DRAW=EGALITE!"
+
+    set "T_GAMES=JEUX"
+    set "T_GUESS=1 - Deviner le nombre"
+    set "T_RPS=2 - Pierre Papier Ciseaux"
+    set "T_BACK=3 - Retour"
+
+    set "T_GUESS_TITLE=DEVINE LE NOMBRE"
+    set "T_GUESS_TEXT=Devine un nombre de 1 a 10"
+    set "T_NUMBER=Nombre"
+
+    set "T_RPS_TITLE=PIERRE PAPIER CISEAUX"
+    set "T_ROCK=1 - Pierre"
+    set "T_PAPER=2 - Papier"
+    set "T_SCISSORS=3 - Ciseaux"
+
+    set "T_DAY=jours"
 )
 
+
+:: ------------------------------------------------------------
+:: CHINESE
+:: ------------------------------------------------------------
+
 if "%LANG%"=="ZH" (
+
     set "T_TITLE=电子宠物"
+    set "T_ASKNAME=你想给你的电子宠物取什么名字"
+    set "T_WELCOME=欢迎来到电子宠物世界!"
+
     set "T_NAME=名字"
     set "T_HEALTH=健康"
     set "T_HUNGER=饥饿"
@@ -250,21 +406,38 @@ if "%LANG%"=="ZH" (
     set "T_BYE=再见!"
     set "T_TIRED=太累了!"
     set "T_DEAD=死了!"
+    set "T_NOTENOUGH=金币不够!"
+    set "T_HEALTHLOW=健康值太低!"
+
     set "T_WIN=你赢了!"
     set "T_LOSE=你输了!"
     set "T_DRAW=平局!"
+
+    set "T_GAMES=游戏"
+    set "T_GUESS=1 - 猜数字"
+    set "T_RPS=2 - 石头剪刀布"
+    set "T_BACK=3 - 返回"
+
+    set "T_GUESS_TITLE=猜数字"
+    set "T_GUESS_TEXT=猜一个1到10之间的数字"
+    set "T_NUMBER=数字"
+
+    set "T_RPS_TITLE=石头剪刀布"
+    set "T_ROCK=1 - 石头"
+    set "T_PAPER=2 - 布"
+    set "T_SCISSORS=3 - 剪刀"
+
+    set "T_DAY=天"
 )
 
 exit /b
 
 
-:: ==========================================================
-:: MAIN
-:: ==========================================================
+:: ============================================================
+:: MENU PRINCIPALE
+:: ============================================================
 
 :MAIN
-
-call :TEXT
 
 :MENU
 
@@ -275,26 +448,26 @@ if !HEALTH! LEQ 0 goto DEAD
 cls
 
 echo.
-echo ============================================================
+echo =================================================================
 echo.
-echo                     🐣 !T_TITLE!
+echo                         🐣 !T_TITLE!
 echo.
-echo ============================================================
+echo =================================================================
 echo.
 
-call :IDLE_ART
+call :ART_HAPPY
 
 echo.
-echo   !T_NAME!    : !NAME!
+echo   !T_NAME!       : !NAME!
 echo.
 echo   ❤️ !T_HEALTH!  : !HEALTH!/100
 echo   🍖 !T_HUNGER!  : !HUNGER!/100
 echo   😊 !T_HAPPY!   : !HAPPINESS!/100
 echo   ⚡ !T_ENERGY!  : !ENERGY!/100
-echo   🎂 !T_AGE!     : !AGE!
+echo   🎂 !T_AGE!     : !AGE! !T_DAY!
 echo   💰 !T_COINS!   : !COINS!
 echo.
-echo ============================================================
+echo =================================================================
 echo.
 echo   !T_FOOD!
 echo   !T_PLAY!
@@ -304,7 +477,7 @@ echo   !T_PET!
 echo   !T_SAVE!
 echo   !T_EXIT!
 echo.
-echo ============================================================
+echo =================================================================
 echo.
 
 choice /c 1234567 /n /m "> "
@@ -320,63 +493,66 @@ if errorlevel 1 goto FOOD
 goto MENU
 
 
-:: ==========================================================
-:: ART FERMA
-:: ==========================================================
+:: ============================================================
+:: ART FELICE
+:: ============================================================
 
-:IDLE_ART
+:ART_HAPPY
 
 echo.
-echo             /\_/\
-echo            ( o.o )
-echo             ^> ^<
+echo                 /\_/\
+echo                ( ^_^ )
+echo                 > ^<
 echo.
 exit /b
 
 
-:: ==========================================================
-:: ANIMAZIONE CIBO
-:: ==========================================================
+:: ============================================================
+:: CIBO + ANIMAZIONE
+:: ============================================================
 
 :FOOD
 
 cls
 
 echo.
-echo        !NAME! !T_EATING!
+echo                  !NAME! !T_EATING!
 echo.
 
-echo             /\_/\
-echo            ( o.o )
-echo             ^> ^<
+echo                 /\_/\
+echo                ( o.o )
+echo                 > ^<
 echo.
-echo                 🍎
+echo                    🍎
+
 timeout /t 1 /nobreak >nul
 
 cls
 
 echo.
-echo        !NAME! !T_EATING!
+echo                  !NAME! !T_EATING!
 echo.
 
-echo             /\_/\
-echo            ( ^o^o )
-echo             ^> ^<
+echo                 /\_/\
+echo                ( ^o^ )
+echo                 > ^<
 echo.
-echo              🍎
+echo                   🍎
+
 timeout /t 1 /nobreak >nul
 
 cls
 
 echo.
-echo        !NAME! !T_EATING!
+echo                  !NAME! !T_EATING!
 echo.
 
-echo             /\_/\
-echo            ( ^@.^@ )
-echo             ^> ^<
+echo                 /\_/\
+echo                ( ^@^ )
+echo                 > ^<
 echo.
-echo              🍎
+echo                  🍎
+
 timeout /t 1 /nobreak >nul
 
 set /a HUNGER+=25
@@ -389,17 +565,20 @@ call :SAVE
 goto MENU
 
 
-:: ==========================================================
-:: GIOCA
-:: ==========================================================
+:: ============================================================
+:: GIOCHI
+:: ============================================================
 
 :PLAY
 
 if !ENERGY! LSS 15 (
+
     cls
+
     echo.
-    echo        😴 !NAME! !T_TIRED!
+    echo                 😴 !NAME! !T_TIRED!
     echo.
+
     pause
     goto MENU
 )
@@ -407,13 +586,15 @@ if !ENERGY! LSS 15 (
 cls
 
 echo.
-echo ============================================================
-echo                    🎮 GIOCHI
-echo ============================================================
+echo =================================================================
+echo                         !T_GAMES!
+echo =================================================================
 echo.
-echo             1 - Indovina il numero
-echo             2 - Sasso Carta Forbici
-echo             3 - Torna indietro
+echo                         !T_GUESS!
+echo                         !T_RPS!
+echo                         !T_BACK!
+echo.
+echo =================================================================
 echo.
 
 choice /c 123 /n /m "> "
@@ -422,10 +603,12 @@ if errorlevel 3 goto MENU
 if errorlevel 2 goto RPS
 if errorlevel 1 goto GUESS
 
+goto MENU
 
-:: ==========================================================
+
+:: ============================================================
 :: INDOVINA NUMERO
-:: ==========================================================
+:: ============================================================
 
 :GUESS
 
@@ -434,25 +617,31 @@ cls
 set /a SECRET=%random% %% 10 + 1
 
 echo.
-echo              🎯 INDOVINA IL NUMERO
+echo =================================================================
+echo                    !T_GUESS_TITLE!
+echo =================================================================
 echo.
-echo              Numero da 1 a 10
+echo                 !T_GUESS_TEXT!
 echo.
 
-set /p "GUESS=> "
+set /p "GUESS=!T_NUMBER!: "
 
 if "!GUESS!"=="!SECRET!" (
 
     echo.
-    echo                 🎉 !T_WIN!
+    echo                         🎉 !T_WIN!
+    echo.
+
     set /a HAPPINESS+=20
     set /a COINS+=10
 
 ) else (
 
     echo.
-    echo                 ❌ !T_LOSE!
-    echo                 Numero: !SECRET!
+    echo                         ❌ !T_LOSE!
+    echo                         !SECRET!
+    echo.
+
     set /a HAPPINESS-=5
 )
 
@@ -466,30 +655,33 @@ pause
 goto MENU
 
 
-:: ==========================================================
+:: ============================================================
 :: SASSO CARTA FORBICI
-:: ==========================================================
+:: ============================================================
 
 :RPS
 
 cls
 
 echo.
-echo              🪨  📄  ✂️
+echo =================================================================
+echo                    !T_RPS_TITLE!
+echo =================================================================
 echo.
-echo              1 - Sasso
-echo              2 - Carta
-echo              3 - Forbici
+echo                         !T_ROCK!
+echo                         !T_PAPER!
+echo                         !T_SCISSORS!
 echo.
 
 choice /c 123 /n /m "> "
-set "PLAYER=!errorlevel!"
 
+set "PLAYER=!errorlevel!"
 set /a CPU=%random% %% 3 + 1
 
 if !PLAYER! EQU !CPU! (
+
     echo.
-    echo                 😐 !T_DRAW!
+    echo                         😐 !T_DRAW!
     goto RPS_END
 )
 
@@ -498,16 +690,19 @@ if !PLAYER! EQU 2 if !CPU! EQU 1 goto RPS_WIN
 if !PLAYER! EQU 3 if !CPU! EQU 2 goto RPS_WIN
 
 echo.
-echo                 😭 !T_LOSE!
+echo                         😭 !T_LOSE!
 set /a HAPPINESS-=5
 goto RPS_END
+
 
 :RPS_WIN
 
 echo.
-echo                 🎉 !T_WIN!
+echo                         🎉 !T_WIN!
+
 set /a HAPPINESS+=15
 set /a COINS+=5
+
 
 :RPS_END
 
@@ -521,57 +716,57 @@ pause
 goto MENU
 
 
-:: ==========================================================
-:: DORMI
-:: ==========================================================
+:: ============================================================
+:: DORMIRE + ANIMAZIONE
+:: ============================================================
 
 :SLEEP
 
 cls
 
 echo.
-echo              !NAME! !T_SLEEPING!
+echo                    !NAME! !T_SLEEPING!
 echo.
 
-echo             /\_/\
-echo            ( -.- )
-echo             > ^<
-echo.
-timeout /t 1 /nobreak >nul
-
-cls
-
-echo.
-echo              !NAME! !T_SLEEPING!
-echo.
-
-echo             /\_/\
-echo            ( -.- ) z
-echo             > ^<
+echo                 /\_/\
+echo                ( -.- )
+echo                 > ^<
 echo.
 timeout /t 1 /nobreak >nul
 
 cls
 
 echo.
-echo              !NAME! !T_SLEEPING!
+echo                    !NAME! !T_SLEEPING!
 echo.
 
-echo             /\_/\
-echo            ( -.- ) zZ
-echo             > ^<
+echo                 /\_/\
+echo                ( -.- ) z
+echo                 > ^<
 echo.
 timeout /t 1 /nobreak >nul
 
 cls
 
 echo.
-echo              !NAME! !T_SLEEPING!
+echo                    !NAME! !T_SLEEPING!
 echo.
 
-echo             /\_/\
-echo            ( ^o^o )
-echo             > ^<
+echo                 /\_/\
+echo                ( -.- ) zZ
+echo                 > ^<
+echo.
+timeout /t 1 /nobreak >nul
+
+cls
+
+echo.
+echo                    !NAME! !T_SLEEPING!
+echo.
+
+echo                 /\_/\
+echo                ( ^_^ )
+echo                 > ^<
 echo.
 
 set /a ENERGY+=40
@@ -586,18 +781,22 @@ pause
 goto MENU
 
 
-:: ==========================================================
+:: ============================================================
 :: CURA
-:: ==========================================================
+:: ============================================================
 
 :HEAL
 
 cls
 
 if !COINS! LSS 5 (
+
     echo.
-    echo                 💸 NO!
+    echo                         💸
     echo.
+    echo                 !T_NOTENOUGH!
+    echo.
+
     pause
     goto MENU
 )
@@ -606,46 +805,59 @@ set /a COINS-=5
 set /a HEALTH+=25
 set /a HAPPINESS+=5
 
-echo.
-echo             💊 !NAME! !T_HEALED!
-echo.
-
 call :LIMIT
 call :SAVE
+
+echo.
+echo                 💊 !NAME! !T_HEALED!
+echo.
 
 pause
 goto MENU
 
 
-:: ==========================================================
-:: ACCAREZZA
-:: ==========================================================
+:: ============================================================
+:: ACCAREZZARE + ANIMAZIONE
+:: ============================================================
 
 :PET
 
 cls
 
 echo.
-echo             ❤️ !T_PETTING! !NAME!
+echo                 ❤️ !T_PETTING! !NAME!
 echo.
 
-echo             /\_/\
-echo            ( ^_^ )
-echo             > ^<
+echo                 /\_/\
+echo                ( o.o )
+echo                 > ^<
 echo.
+
 timeout /t 1 /nobreak >nul
 
 cls
 
 echo.
-echo             ❤️ !T_PETTING! !NAME!
+echo                 ❤️ !T_PETTING! !NAME!
 echo.
 
-echo             /\_/\
-echo            ( ^-^ )
-echo             > ^<
+echo                 /\_/\
+echo                ( ^_^ )
+echo                 > ^<
 echo.
+
 timeout /t 1 /nobreak >nul
+
+cls
+
+echo.
+echo                 ❤️ !T_PETTING! !NAME!
+echo.
+
+echo                 /\_/\
+echo                ( ^-^ )
+echo                 > ^<
+echo.
 
 set /a HAPPINESS+=10
 set /a ENERGY-=2
@@ -657,9 +869,9 @@ pause
 goto MENU
 
 
-:: ==========================================================
-:: SALVA
-:: ==========================================================
+:: ============================================================
+:: SALVATAGGIO
+:: ============================================================
 
 :SAVE_MENU
 
@@ -668,11 +880,11 @@ call :SAVE
 cls
 
 echo.
-echo ============================================================
+echo =================================================================
 echo.
-echo                  💾 !T_SAVED!
+echo                       💾 !T_SAVED!
 echo.
-echo ============================================================
+echo =================================================================
 echo.
 
 pause
@@ -682,7 +894,6 @@ goto MENU
 :SAVE
 
 (
-echo LANG=!LANG!
 echo NAME=!NAME!
 echo HEALTH=!HEALTH!
 echo HUNGER=!HUNGER!
@@ -695,9 +906,9 @@ echo COINS=!COINS!
 exit /b
 
 
-:: ==========================================================
-:: LOAD
-:: ==========================================================
+:: ============================================================
+:: CARICAMENTO
+:: ============================================================
 
 :LOAD
 
@@ -708,9 +919,9 @@ for /f "tokens=1,* delims==" %%A in (%SAVE%) do (
 exit /b
 
 
-:: ==========================================================
-:: LIMITI
-:: ==========================================================
+:: ============================================================
+:: LIMITI STATISTICHE
+:: ============================================================
 
 :LIMIT
 
@@ -726,38 +937,39 @@ if !HAPPINESS! LSS 0 set /a HAPPINESS=0
 if !ENERGY! GTR 100 set /a ENERGY=100
 if !ENERGY! LSS 0 set /a ENERGY=0
 
+:: Se la fame arriva a zero perde salute
 if !HUNGER! LEQ 0 set /a HEALTH-=5
 
 exit /b
 
 
-:: ==========================================================
+:: ============================================================
 :: MORTE
-:: ==========================================================
+:: ============================================================
 
 :DEAD
 
 cls
 
 echo.
-echo ============================================================
+echo =================================================================
 echo.
-echo                     ☠️ GAME OVER
+echo                         ☠️ GAME OVER
 echo.
-echo ============================================================
-echo.
-
-echo             /\_/\
-echo            ( x.x )
-echo             > ^<
+echo =================================================================
 echo.
 
+echo                 /\_/\
+echo                ( x.x )
+echo                 > ^<
 echo.
-echo             !NAME! !T_DEAD!
+
 echo.
-echo             !T_AGE!: !AGE!
+echo                    !NAME! !T_DEAD!
 echo.
-echo ============================================================
+echo                    !T_AGE!: !AGE! !T_DAY!
+echo.
+echo =================================================================
 echo.
 
 del "%SAVE%" >nul 2>&1
@@ -766,9 +978,9 @@ pause
 exit
 
 
-:: ==========================================================
+:: ============================================================
 :: USCITA
-:: ==========================================================
+:: ============================================================
 
 :EXIT
 
@@ -777,11 +989,11 @@ call :SAVE
 cls
 
 echo.
-echo ============================================================
+echo =================================================================
 echo.
-echo                    !T_BYE!
+echo                          !T_BYE!
 echo.
-echo ============================================================
+echo =================================================================
 echo.
 
 timeout /t 2 /nobreak >nul
